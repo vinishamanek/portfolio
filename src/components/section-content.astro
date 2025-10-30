@@ -1,0 +1,42 @@
+---
+interface Props {
+  id: string;
+}
+
+const { id } = Astro.props;
+---
+
+<div class="section-content" data-section={id}>
+  <slot />
+</div>
+
+<style>
+  .section-content {
+    display: none;
+    opacity: 0;
+    padding: 1rem 3rem 3rem 3rem;
+    max-width: 900px;
+    margin: 0 auto;
+    transition: opacity 0.3s ease;
+  }
+
+  .section-content.active {
+    display: block;
+    animation: fadeIn 0.3s ease forwards;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .section-content {
+      padding: 1rem 1.5rem 2rem 1.5rem;
+    }
+  }
+</style>

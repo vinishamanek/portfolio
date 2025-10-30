@@ -1,0 +1,127 @@
+---
+interface Props {
+  title: string;
+  id: string;
+}
+
+const { title, id } = Astro.props;
+---
+
+<div class="panel-section" data-panel={id}>
+  <button class="panel-button">
+    <h2>{title}</h2>
+  </button>
+  <div class="panel-content-wrapper">
+    <div class="panel-content">
+      <slot />
+    </div>
+  </div>
+</div>
+
+<style>
+  .panel-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    transition: flex 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 0;
+  }
+
+  .panel-section.active {
+    flex: 8;
+  }
+
+  .panel-button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 2rem;
+    font-family: inherit;
+    width: 100%;
+    transition: all 0.3s ease;
+  }
+
+  .panel-section:not(.active) .panel-button:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .panel-section.active .panel-button {
+    cursor: default;
+    padding: 3rem 3rem 2rem 3rem;
+  }
+
+  h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 0;
+    transition: font-size 0.3s ease;
+  }
+
+  .panel-section.active h2 {
+    font-size: 3rem;
+  }
+
+  .panel-content-wrapper {
+    flex: 1;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .panel-section.active .panel-content-wrapper {
+    max-height: calc(100vh - 150px);
+  }
+
+  .panel-content {
+    padding: 0 3rem 3rem 3rem;
+    overflow-y: auto;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.3s ease 0.2s;
+  }
+
+  .panel-section.active .panel-content {
+    opacity: 1;
+  }
+
+  /* Scrollbar styling */
+  .panel-content::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .panel-content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .panel-content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+  }
+
+  .panel-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  @media (max-width: 768px) {
+    .panel-button {
+      padding: 1.5rem;
+    }
+
+    .panel-section.active .panel-button {
+      padding: 2rem 2rem 1.5rem 2rem;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+    }
+
+    .panel-section.active h2 {
+      font-size: 2rem;
+    }
+
+    .panel-content {
+      padding: 0 2rem 2rem 2rem;
+    }
+  }
+</style>

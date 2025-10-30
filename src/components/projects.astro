@@ -1,0 +1,102 @@
+---
+const projects = [
+  {
+    name: 'coveo',
+    description: 'software developer intern, knowledge core team',
+    url: 'https://github.com/coveo/ui-kit',
+    date: 'may 2025 - august 2025'
+  },
+  {
+    name: 'vinimap',
+    description: 'concordia campus navigation mobile app - mini capstone project winner',
+    url: 'https://github.com/mahutt/ViniMap',
+    date: 'january 2025 - april 2025'
+  },
+  {
+    name: 'prezpal',
+    description: 'voice-controlled presentation editor with hands-free slide creation - conuhacks ix winner',
+    url: 'https://devpost.com/software/prezpal-36079w',
+    date: 'february 2025'
+  },
+  {
+    name: 'duomove',
+    description: 'ai-powered motion-sensing game using raspberry pi and real-time pose estimation - hackthehill 2nd place',
+    url: 'https://devpost.com/software/duo-move',
+    date: 'september 2024'
+  },
+];
+---
+
+<div class="projects-content">
+  <div class="projects-list">
+    {projects.map(project => (
+      <div class="project-card">
+        <div class="project-header">
+          <h3>
+            <a href={project.url} target="_blank" rel="noopener noreferrer">
+              {project.name}
+            </a>
+          </h3>
+          <p class="date">{project.date}</p>
+        </div>
+        <p class="description">{project.description}</p>
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  .projects-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .project-card {
+    padding: 0;
+  }
+
+  .project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .project-card h3 {
+    font-size: 1.3rem;
+    margin: 0;
+  }
+
+  .project-card h3 a {
+    color: white;
+    transition: color 0.3s ease;
+  }
+
+  .project-card h3 a:hover {
+    color: #8bb8ff;
+  }
+
+  .date {
+    font-size: 1rem;
+    opacity: 0.5;
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  .description {
+    font-size: 1rem;
+    margin: 0;
+    opacity: 0.9;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 768px) {
+    .project-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.25rem;
+    }
+  }
+</style>

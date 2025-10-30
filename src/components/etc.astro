@@ -1,0 +1,58 @@
+---
+const etc = [
+  {
+    name: 'fog lake concert review, the concordian newspaper',
+    url: 'https://theconcordian.com/2024/04/welcoming-spring-with-loving-and-fog-lake/',
+  },
+  {
+    name: 'briston maroney concert review, the concordian newspaper',
+    url: 'https://theconcordian.com/2024/02/briston-maroney-charmed-the-crowd-at-montreals-club-soda/',
+  },
+];
+---
+
+  <div class="etc-list">
+    {etc.map(item => (
+      <div class="etc-card">
+        <h3>
+          <a href={item.url} target="_blank" rel="noopener noreferrer">
+            {item.name}
+          </a>
+        </h3>
+      </div>
+    ))}
+  </div>
+
+<style>
+  .etc-list {
+    display: flex;
+    flex-direction: column;
+    padding-top: 1rem;
+    gap: 2rem;
+  }
+
+  .etc-card {
+    padding: 0;
+  }
+
+  .etc-card h3 {
+    font-size: 1.3rem;
+    margin: 0 0 0.5rem 0;
+  }
+
+  .etc-card h3 a {
+    color: white;
+    transition: color 0.3s ease;
+  }
+
+  .etc-card h3 a:hover {
+    color: #8bb8ff;
+  }
+
+  .description {
+    font-size: 1rem;
+    margin: 0;
+    opacity: 0.9;
+    line-height: 1.6;
+  }
+</style>
