@@ -17,11 +17,11 @@ import InterestsContent from '../components/etc.astro';
 
     <div id="content-container">
       <nav id="section-nav">
-        <button class="nav-button active" data-section="about">about</button>
+        <button class="nav-button active" data-section="about">about me</button>
         <span class="separator">/</span>
-        <button class="nav-button" data-section="projects">projects & work </button>
+        <button class="nav-button" data-section="projects">software</button>
         <span class="separator">/</span>
-        <button class="nav-button" data-section="interests">etc</button>
+        <button class="nav-button" data-section="interests">interests & etc</button>
       </nav>
 
       <div id="sections">
@@ -55,6 +55,7 @@ import InterestsContent from '../components/etc.astro';
     display: flex;
     justify-content: center;
     align-items: center;
+    transform: translateY(-9vh);
   }
 
   h1 {
@@ -150,6 +151,10 @@ import InterestsContent from '../components/etc.astro';
 
     main {
       padding: 1rem;
+    }
+
+    #intro {
+      transform: translateY(-6vh);
     }
 
     .nav-button {
