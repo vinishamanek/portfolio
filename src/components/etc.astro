@@ -1,58 +1,91 @@
 ---
-const etc = [
+const sections = [
   {
-    name: 'fog lake concert review, the concordian newspaper',
-    url: 'https://theconcordian.com/2024/04/welcoming-spring-with-loving-and-fog-lake/',
-  },
-  {
-    name: 'briston maroney concert review, the concordian newspaper',
-    url: 'https://theconcordian.com/2024/02/briston-maroney-charmed-the-crowd-at-montreals-club-soda/',
+    title: 'Journalism',
+    items: [
+      {
+        name: '- Loving and Fog Lake, concert review',
+        publication: 'The Concordian',
+        url: 'https://theconcordian.com/2024/04/welcoming-spring-with-loving-and-fog-lake/',
+      },
+      {
+        name: '- Briston Maroney, concert review',
+        publication: 'The Concordian',
+        url: 'https://theconcordian.com/2024/02/briston-maroney-charmed-the-crowd-at-montreals-club-soda/',
+      },
+    ]
   },
 ];
 ---
 
-  <div class="etc-list">
-    {etc.map(item => (
-      <div class="etc-card">
-        <h3>
-          <a href={item.url} target="_blank" rel="noopener noreferrer">
-            {item.name}
-          </a>
-        </h3>
+<div class="sections-container">
+  {sections.map(section => (
+    <section class="content-section">
+      <h2 class="section-title">{section.title}</h2>
+      <div class="items-list">
+        {section.items.map(item => (
+          <div class="item-card">
+            <h3>
+              <a href={item.url} target="_blank" rel="noopener noreferrer">
+                {item.name}
+              </a>
+            </h3>
+            <p class="publication">{item.publication}</p>
+          </div>
+        ))}
       </div>
-    ))}
-  </div>
+    </section>
+  ))}
+</div>
 
 <style>
-  .etc-list {
+  .sections-container {
     display: flex;
     flex-direction: column;
-    padding-top: 1rem;
+    gap: 3rem;
+  }
+
+  .content-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+    margin: 0;
+    color: white;
+    opacity: 0.95;
+  }
+
+  .items-list {
+    display: flex;
+    flex-direction: column;
     gap: 2rem;
   }
 
-  .etc-card {
+  .item-card {
     padding: 0;
   }
 
-  .etc-card h3 {
+  .item-card h3 {
     font-size: 1.3rem;
-    margin: 0 0 0.5rem 0;
+    margin: 0 0 0.25rem 0;
   }
 
-  .etc-card h3 a {
+  .item-card h3 a {
     color: white;
     transition: color 0.3s ease;
   }
 
-  .etc-card h3 a:hover {
+  .item-card h3 a:hover {
     color: #8bb8ff;
   }
 
-  .description {
-    font-size: 1rem;
+  .publication {
+    font-size: 0.95rem;
     margin: 0;
-    opacity: 0.9;
-    line-height: 1.6;
+    opacity: 0.7;
+    font-style: italic;
   }
 </style>
