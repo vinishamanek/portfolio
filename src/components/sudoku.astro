@@ -1,0 +1,379 @@
+---
+---
+
+<div id="sudoku-screen" class="sudoku-screen" hidden>
+  <div class="sudoku-container">
+    <div id="sudoku-grid" class="sudoku-grid" aria-live="polite"></div>
+    <div class="feedback-message" id="feedback-message"></div>
+  </div>
+</div>
+
+<style>
+  .sudoku-screen {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 10000;
+    background: #2C1404;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .sudoku-screen:not([hidden]) {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .sudoku-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    opacity: 0;
+    transition: opacity 0.4s ease 0.4s;
+  }
+
+  .sudoku-screen:not([hidden]) .sudoku-container {
+    opacity: 1;
+  }
+
+  .sudoku-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 80px);
+    grid-template-rows: repeat(4, 80px);
+    gap: 0;
+    padding: 3px;
+    box-shadow: 
+      0 10px 40px rgba(0, 0, 0, 0.5),
+      0 0 0 1px rgba(255, 255, 255, 0.1);
+    width: max-content;
+  }
+
+  .sudoku-grid :global(input) {
+    width: 80px;
+    height: 80px;
+    border: 1px solid #444;
+    background: #fff;
+    color: #ffa316;
+    font-size: 2.5rem;
+    font-weight: 500;
+    text-align: center;
+    transition: all 0.15s ease;
+    cursor: pointer;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+
+  .sudoku-grid :global(input:nth-child(4n+2)) {
+    border-right: 3px solid #000;
+  }
+
+  .sudoku-grid :global(input:nth-child(n+5):nth-child(-n+8)) {
+    border-bottom: 3px solid #000;
+  }
+
+  .sudoku-grid :global(input:not(:disabled):hover) {
+    background: #fbfbfbff;
+    border-color: #ffa316;
+    z-index: 1;
+  }
+
+  .sudoku-grid :global(input:not(:disabled):focus) {
+    outline: none;
+    background: #fbfbfbff;
+    border-color: #ffa316;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+    z-index: 1;
+  }
+
+  .sudoku-grid :global(input:disabled) {
+    background: #e5e5e5;
+    color: #404040;
+    font-weight: 600;
+    font-size: 2.2rem;
+    cursor: default;
+  }
+
+  .sudoku-grid :global(input.error) {
+    background: #fee;
+    color: #dc2626;
+    animation: shake 0.4s ease;
+  }
+
+  .sudoku-grid :global(input.correct) {
+    background: #f0fdf4;
+    color: #073718ff;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+  }
+
+  .feedback-message {
+    text-align: center;
+    min-height: 2rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin-top: 1rem;
+  }
+
+  .feedback-message.show {
+    opacity: 1;
+  }
+
+  .feedback-message.success {
+    color: #86efac;
+  }
+
+  .feedback-message.error {
+    color: #fca5a5;
+  }
+
+  @media (max-width: 640px) {
+    .sudoku-grid {
+      grid-template-columns: repeat(4, 70px);
+      grid-template-rows: repeat(4, 70px);
+    }
+
+    .sudoku-grid :global(input) {
+      width: 70px;
+      height: 70px;
+      font-size: 2rem;
+    }
+
+    .sudoku-grid :global(input:disabled) {
+      font-size: 1.8rem;
+    }
+
+    .feedback-message {
+      font-size: 1.25rem;
+    }
+  }
+</style>
+
+<script>
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSudoku);
+  } else {
+    initSudoku();
+  }
+
+  function initSudoku() {
+    const screen = document.getElementById('sudoku-screen');
+    const container = document.getElementById('sudoku-container');
+    const gridEl = document.getElementById('sudoku-grid');
+    const flower = document.getElementById('sudoku-flower');
+    const feedbackEl = document.getElementById('feedback-message');
+
+    const base = [
+      [1,2,3,4],
+      [3,4,1,2],
+      [2,1,4,3],
+      [4,3,2,1]
+    ];
+
+    function cloneGrid(g: number[][]){ return g.map(r=>r.slice()); }
+
+    function shuffleArray<T>(a: T[]){
+      for(let i=a.length-1;i>0;i--){
+        const j=Math.floor(Math.random()*(i+1));
+        [a[i],a[j]]=[a[j],a[i]];
+      }
+    }
+
+    function shuffleSolution(sol: number[][]){
+      const g = cloneGrid(sol);
+      const bandRows = [[0,1],[2,3]];
+      shuffleArray(bandRows);
+      const newRows: number[][] = [];
+      bandRows.forEach(b => {
+        const copy = b.slice(); 
+        shuffleArray(copy);
+        copy.forEach(r => newRows.push(g[r]));
+      });
+      const transposed = [0,1,2,3].map(c => newRows.map(r=>r[c]));
+      const bandCols = [[0,1],[2,3]];
+      shuffleArray(bandCols);
+      const newCols: number[][] = [];
+      bandCols.forEach(b => {
+        const copy = b.slice(); 
+        shuffleArray(copy);
+        copy.forEach(c => newCols.push(transposed[c]));
+      });
+      const finalGrid = [0,1,2,3].map(r => newCols.map(col => col[r]));
+      const mapping = [1,2,3,4].slice(); 
+      shuffleArray(mapping);
+      const mapped = finalGrid.map(row => row.map(val => mapping[val-1]));
+      return mapped;
+    }
+
+    function removeCells(solution: number[][], holes: number){
+      const puzzle = cloneGrid(solution);
+      const cells: [number, number][] = [];
+      for(let r=0;r<4;r++) for(let c=0;c<4;c++) cells.push([r,c]);
+      shuffleArray(cells);
+      for(let i=0;i<holes;i++){
+        const [r,c] = cells[i];
+        puzzle[r][c] = 0;
+      }
+      return puzzle;
+    }
+
+    let currentSolution = cloneGrid(base);
+    let currentPuzzle = removeCells(currentSolution, 6);
+
+    function renderGrid(puzzle: number[][]){
+      if (!gridEl) return;
+      gridEl.innerHTML = '';
+      for(let r=0;r<4;r++){
+        for(let c=0;c<4;c++){
+          const val = puzzle[r][c];
+          const input = document.createElement('input');
+          input.setAttribute('inputmode','numeric');
+          input.setAttribute('maxlength','1');
+          input.dataset.r = String(r); 
+          input.dataset.c = String(c);
+          if(val !== 0){
+            input.value = String(val);
+            input.disabled = true;
+          } else {
+            input.value = '';
+            input.disabled = false;
+            input.addEventListener('input', onCellInput);
+          }
+          gridEl.appendChild(input);
+        }
+      }
+    }
+
+    function onCellInput(e: Event){
+      const inp = e.target as HTMLInputElement;
+      const v = inp.value.replace(/[^1-4]/g,'').slice(0,1);
+      inp.value = v;
+      inp.classList.remove('error', 'correct');
+      hideFeedback();
+      
+      checkIfComplete();
+    }
+
+    function showScreen(){
+      if(!screen) return;
+      
+      screen.hidden = false;
+      document.dispatchEvent(new CustomEvent('sudoku-opening'));
+      newPuzzle();
+    }
+
+    function hideScreen(){
+      if(!screen) return;
+      screen.hidden = true;
+    }
+
+    function showFeedback(message: string, type: 'success' | 'error') {
+      if (!feedbackEl) return;
+      feedbackEl.textContent = message;
+      feedbackEl.className = `feedback-message show ${type}`;
+    }
+
+    function hideFeedback() {
+      if (!feedbackEl) return;
+      feedbackEl.classList.remove('show');
+    }
+
+    function newPuzzle(){
+      currentSolution = shuffleSolution(base);
+      currentPuzzle = removeCells(currentSolution, 6 + Math.floor(Math.random()*2));
+      renderGrid(currentPuzzle);
+      hideFeedback();
+    }
+
+    function checkIfComplete(){
+      if (!gridEl) return;
+      const inputs = Array.from(gridEl.querySelectorAll('input'));
+      
+      let allFilled = true;
+      for(const inp of inputs){
+        if(!inp.disabled && !inp.value) {
+          allFilled = false;
+          break;
+        }
+      }
+      
+      if(!allFilled) return;
+      
+      checkSolution();
+    }
+
+    function checkSolution(){
+      if (!gridEl) return;
+      const inputs = Array.from(gridEl.querySelectorAll('input'));
+      const guessed: number[][] = [];
+      for(let r=0;r<4;r++) guessed.push([0,0,0,0]);
+      
+      for(const inp of inputs){
+        const r = Number(inp.dataset.r), c = Number(inp.dataset.c);
+        const v = inp.value ? Number(inp.value) : 0;
+        guessed[r][c] = v;
+      }
+      
+      for(let r=0;r<4;r++) for(let c=0;c<4;c++){
+        if(currentPuzzle[r][c] !== 0) guessed[r][c] = currentPuzzle[r][c];
+      }
+      
+      let correct = true;
+      
+      for(let r=0;r<4;r++) for(let c=0;c<4;c++){
+        if(guessed[r][c] !== currentSolution[r][c]) correct = false;
+      }
+      
+      if(correct){
+        showFeedback('perfect!', 'success');
+        inputs.forEach(inp => {
+          if (!inp.disabled) inp.classList.add('correct');
+        });
+        setTimeout(() => {
+          hideScreen();
+        }, 1500);
+      } else {
+        inputs.forEach(inp => {
+          if (!inp.disabled) {
+            const r = Number(inp.dataset.r), c = Number(inp.dataset.c);
+            if (inp.value && Number(inp.value) !== currentSolution[r][c]) {
+              inp.classList.add('error');
+            }
+          }
+        });
+      }
+    }
+
+    screen?.addEventListener('click', (e) => {
+      if(e.target === screen) {
+        hideScreen();
+      }
+    });
+
+    flower?.addEventListener('click', () => {
+      if(screen?.hidden) { 
+        showScreen(); 
+      } else { 
+        hideScreen(); 
+      }
+    });
+
+    newPuzzle();
+  }
+</script>

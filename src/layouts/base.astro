@@ -1,4 +1,6 @@
 ---
+import Sudoku from '../components/Sudoku.astro';
+
 interface Props {
   title?: string;
 }
@@ -14,7 +16,14 @@ const { title = 'vinisha manek' } = Astro.props;
     <title>{title}</title>
   </head>
   <body>
-    <slot />
+    <div id="main-content">
+      <slot />
+    </div>
+    
+  <button id="sudoku-flower" aria-label="Play Sudoku">
+    <img src="/flower.svg" alt="flower" />
+  </button>
+  <Sudoku client:load />
   </body>
 </html>
 
@@ -30,6 +39,7 @@ const { title = 'vinisha manek' } = Astro.props;
     color: white;
     font-family: Helvetica, Arial, sans-serif;
     min-height: 100vh;
+    overflow-x: hidden;
   }
 
   a {
@@ -40,4 +50,132 @@ const { title = 'vinisha manek' } = Astro.props;
   a:hover {
     text-decoration: underline;
   }
+
+  #main-content {
+    transition: opacity 0.3s ease;
+  }
+
+  body.sudoku-active #main-content {
+    pointer-events: none;
+  }
+
+  #sudoku-flower {
+    position: fixed;
+    right: 1.5rem;
+    bottom: 1.5rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+    z-index: 1000;
+  }
+
+  #sudoku-flower img {
+    width: 50px;
+    height: 50px;
+    display: block;
+  }
+
+  #sudoku-flower:hover {
+    transform: scale(1.2) rotate(20deg);
+  }
+
+  #sudoku-flower:active {
+    transform: scale(0.95);
+  }
+
+  #sudoku-flower:focus {
+    outline: none;
+  }
+
+  #sudoku-flower.animating {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .flower-clone {
+    position: fixed;
+    z-index: 10002;
+    pointer-events: none;
+    transition: all 1.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .flower-clone img {
+    width: 50px;
+    height: 50px;
+    display: block;
+  }
+
+  @media (max-width: 640px) {
+    #sudoku-flower img {
+      width: 40px;
+      height: 40px;
+    }
+
+    .flower-clone img {
+      width: 40px;
+      height: 40px;
+    }
+  }
 </style>
+
+<script>
+  const flower = document.getElementById('sudoku-flower');
+  const sudokuScreen = document.getElementById('sudoku-screen');
+  
+  document.addEventListener('sudoku-opening', () => {
+    if (!flower) return;
+    
+    const rect = flower.getBoundingClientRect();
+    
+    const clone = document.createElement('div');
+    clone.className = 'flower-clone';
+    clone.innerHTML = flower.innerHTML; // Copy the img element
+    clone.style.left = `${rect.left + rect.width / 2}px`;
+    clone.style.top = `${rect.top + rect.height / 2}px`;
+    clone.style.transform = 'translate(-50%, -50%)';
+    document.body.appendChild(clone);
+    
+    flower.classList.add('animating');
+    
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+        
+        clone.style.left = `${centerX}px`;
+        clone.style.top = `${centerY}px`;
+        clone.style.transform = 'translate(-50%, -50%) scale(6) rotate(360deg)';
+        clone.style.opacity = '0';
+      });
+    });
+    
+    // Clean up
+    setTimeout(() => {
+      clone.remove();
+      flower.classList.remove('animating');
+    }, 1400);
+  });
+  
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.attributeName === 'hidden') {
+        const target = mutation.target as HTMLElement;
+        if (target.hidden) {
+          document.body.classList.remove('sudoku-active');
+        } else {
+          document.body.classList.add('sudoku-active');
+        }
+      }
+    });
+  });
+
+  if (sudokuScreen) {
+    observer.observe(sudokuScreen, { attributes: true });
+  }
+</script>
