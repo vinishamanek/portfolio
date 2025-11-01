@@ -185,15 +185,17 @@ import InterestsContent from '../components/etc.astro';
   let animating = true;
   document.body.classList.add('animating');
 
-  let tHi: number | undefined;
-  let tName: number | undefined;
-  let tFadeStart: number | undefined;
-  let tFadeEnd: number | undefined;
-  let tShowVisible: number | undefined;
+  let tHi, tName, tFadeStart, tFadeEnd, tShowVisible;
 
   function finishAnim() {
     animating = false;
     document.body.classList.remove('animating');
+    // notify other UI that the intro finished
+    try {
+      document.dispatchEvent(new CustomEvent('intro-finished'));
+    } catch (e) {
+      // ignore if dispatch fails in older browsers
+    }
   }
 
   function clearAllTimers() {
@@ -237,7 +239,7 @@ import InterestsContent from '../components/etc.astro';
       hi.style.transition = 'opacity 0.6s ease-in';
       hi.style.opacity = '1';
     }
-  }, 600) as unknown as number;
+  }, 600);
 
   tName = setTimeout(() => {
     if (name) {
@@ -245,7 +247,7 @@ import InterestsContent from '../components/etc.astro';
       name.style.opacity = '1';
       name.style.maxWidth = '1000px';
     }
-  }, 2000) as unknown as number;
+  }, 2000);
 
   tFadeStart = setTimeout(() => {
     intro?.classList.add('fade-out');
@@ -262,15 +264,15 @@ import InterestsContent from '../components/etc.astro';
             firstSection.classList.add('active');
           }
           finishAnim();
-        }, 50) as unknown as number;
+        }, 50);
       }
-    }, 600) as unknown as number;
-  }, 3500) as unknown as number;
+    }, 600);
+  }, 3500);
 
   // Allow a single tap/click to skip the intro while animating.
   function onSkipOrNavClick(e: Event) {
-    const ev = e as MouseEvent | TouchEvent;
-    const target = (ev.target || ev.srcElement) as HTMLElement;
+  const ev = e;
+  const target = (ev.target || ev.srcElement);
 
     if (animating) {
       e.preventDefault?.();

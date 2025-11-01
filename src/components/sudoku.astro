@@ -261,7 +261,7 @@
     }
 
     function onCellInput(e: Event){
-      const inp = e.target as HTMLInputElement;
+    const inp = e.target;
       const v = inp.value.replace(/[^1-4]/g,'').slice(0,1);
       inp.value = v;
       inp.classList.remove('error', 'correct');
