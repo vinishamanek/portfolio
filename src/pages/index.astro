@@ -190,9 +190,11 @@ import InterestsContent from '../components/etc.astro';
   function finishAnim() {
     animating = false;
     document.body.classList.remove('animating');
-    // notify other UI that the intro finished
     try {
-      document.dispatchEvent(new CustomEvent('intro-finished'));
+      if (!window.__introExplodedDone) {
+        window.__introExplodedDone = true;
+        document.dispatchEvent(new CustomEvent('intro-finished'));
+      }
     } catch (e) {
       // ignore if dispatch fails in older browsers
     }
@@ -230,6 +232,13 @@ import InterestsContent from '../components/etc.astro';
         const firstSection = document.querySelector('.section-content[data-section="about"]');
         firstButton?.classList.add('active');
         if (firstSection instanceof HTMLElement) firstSection.classList.add('active');
+        // If the user skipped the intro, ensure the explosion still runs only once
+        try {
+          if (!window.__introExplodedDone) {
+            window.__introExplodedDone = true;
+            document.dispatchEvent(new CustomEvent('intro-finished'));
+          }
+        } catch (e) {}
       }, 50);
     }
   }
