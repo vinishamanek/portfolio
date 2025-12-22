@@ -1,0 +1,896 @@
+---
+const trinkets = [
+  { id: 'notebooks', section: 'about', image: '/notebooks.svg', alt: 'bag' },
+  { id: 'book', section: 'about', image: '/kiterunner.svg', alt: 'kite runner' },
+  { id: 'wieee', section: 'about', image: '/wieee.svg', alt: 'iced americano' },
+  { id: 'vinyl', section: 'about', image: '/vinyl.svg', alt: 'Nujabes - Luv(sic.) pt3 (feat. Shing02)', interactive: true },
+  { id: 'cup', section: 'about', image: '/cup.svg', alt: 'ceramic cup' },
+  { id: 'keys', section: 'about', image: '/keys.svg', alt: 'keys' },
+  { id: 'fender', section: 'about', image: '/fender.svg', alt: 'fender' },
+  { id: 'exopick', section: 'about', image: '/exopick.svg', alt: 'guitar pick' },
+  { id: 'folder', section: 'projects', image: '/folder.svg', alt: 'untitled document (8)' },
+  { id: 'sewing', section: 'projects', image: '/sewing.svg', alt: 'sewing' },
+  { id: 'trophy', section: 'projects', image: '/trophy.svg', alt: 'trophy' },
+  { id: 'laptop', section: 'projects', image: '/laptop.svg', alt: 'laptop' },
+  { id: 'indigo', section: 'interests', image: '/indigo.svg', alt: 'indigo' },
+  { id: 'coffee', section: 'interests', image: '/coffee.svg', alt: 'coffee' },
+  { id: 'oranges', section: 'interests', image: '/oranges.svg', alt: 'oranges' },
+  { id: 'mat', section: 'interests', image: '/mat.svg', alt: 'mat' },
+  { id: 'madeby', section: 'interests', image: '/madeby.svg', alt: 'made by vinisha' },
+];
+---
+
+<div id="trinkets-container">
+  <div id="youtube-player" style="display: none;"></div>
+  
+  {trinkets.map((trinket) => (
+    <div 
+      class="trinket" 
+      data-section={trinket.section}
+      data-trinket-id={trinket.id}
+    >
+      <img src={trinket.image} alt={trinket.alt} />
+      
+      {trinket.id === 'vinyl' && (
+        <>
+          <div class="vinyl-play-icon"></div>
+          <div class="vinyl-info">
+            <p class="vinyl-info-title">Luv(sic.) pt3 (feat. Shing02)</p>
+            <p class="vinyl-info-artist">Nujabes</p>
+            <p class="vinyl-info-time">0:31 / 5:36</p>
+          </div>
+        </>
+      )}
+    </div>
+  ))}
+  
+  <div class="intro-panel" aria-label="Intro panel with name and links">
+    <h1 class="intro-name">vinisha manek</h1>
+    <ul class="intro-links">
+      <li><a href="https://github.com/vinishamanek" target="_blank" rel="noopener noreferrer">github</a></li>
+      <li><a href="https://linkedin.com/in/vinishamanek" target="_blank" rel="noopener noreferrer">linkedin</a></li>
+      <li><a href="https://mail.google.com/mail/?view=cm&to=vinimanek@gmail.com" target="_blank" rel="noopener noreferrer">email</a></li>
+    </ul>
+  </div>
+  
+  <div id="tap-hint">tap to organize</div>
+</div>
+
+<style>
+  #trinkets-container {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    background: #f2f3f4;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 0;
+  }
+
+  #trinkets-container.organized {
+    cursor: default;
+    min-height: 100vh;
+  }
+
+  .intro-panel {
+    position: absolute;
+    right: 12%;
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: right;
+    z-index: 100;
+    pointer-events: auto;
+    transition: all 1.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  #trinkets-container.organized .intro-panel {
+    right: auto;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  .intro-name {
+    font-size: 2.4rem;
+    line-height: 1.1;
+    margin: 0 0 0.75rem 0;
+    color: #1e293b;
+    font-weight: 800;
+  }
+
+  .intro-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    justify-content: flex-end;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  #trinkets-container.organized .intro-links {
+    justify-content: center;
+  }
+
+  .intro-links a {
+    color: #3b82f6;
+    font-size: 1.05rem;
+    text-decoration: none;
+  }
+
+  .intro-links a:hover {
+    color: #1d4ed8;
+    text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    .intro-panel {
+      right: auto;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+    #trinkets-container.organized .intro-panel {
+      right: auto;
+      left: 50%;
+    }
+    .intro-name {
+      font-size: 2rem;
+    }
+    .intro-links {
+      flex-direction: column;
+      gap: 0.35rem;
+      align-items: center;
+      justify-content: center;
+    }
+    #trinkets-container.organized .intro-links {
+      align-items: center;
+    }
+    .intro-links a {
+      font-size: 1rem;
+    }
+  }
+
+  .trinket {
+    position: absolute;
+    transition: all 1.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    cursor: pointer;
+    opacity: 0;
+  }
+
+  .trinket.visible {
+    opacity: 1;
+  }
+
+  .trinket img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.1));
+  }
+
+  .trinket:hover {
+    transform: scale(1.1);
+  }
+
+  #trinkets-container.organized .trinket:hover {
+    transform: scale(1.1);
+  }
+
+  .trinket[data-trinket-id="vinyl"] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .trinket[data-trinket-id="vinyl"]:hover {
+    transform: scale(1.05);
+  }
+
+  .trinket[data-trinket-id="vinyl"] img {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
+    transition: transform 0.3s ease;
+  }
+
+  @keyframes spin-vinyl {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .trinket[data-trinket-id="vinyl"].playing img {
+    animation: spin-vinyl 3s linear infinite;
+  }
+
+  .vinyl-info {
+    position: absolute;
+    right: -180px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 16px 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    min-width: 160px;
+    z-index: 1000;
+  }
+
+  .trinket[data-trinket-id="vinyl"].playing .vinyl-info {
+    opacity: 1;
+  }
+
+  .vinyl-info-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 4px 0;
+    line-height: 1.3;
+  }
+
+  .vinyl-info-artist {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  .vinyl-info-time {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    margin: 8px 0 0 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Play/pause indicator */
+  .vinyl-play-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 48px;
+    height: 48px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .trinket[data-trinket-id="vinyl"]:hover .vinyl-play-icon {
+    opacity: 1;
+  }
+
+  .trinket[data-trinket-id="vinyl"].playing:hover .vinyl-play-icon {
+    opacity: 0.8;
+  }
+
+  .vinyl-play-icon::before {
+    content: '▶';
+    color: white;
+    font-size: 20px;
+    margin-left: 3px;
+  }
+
+  .trinket[data-trinket-id="vinyl"].playing .vinyl-play-icon::before {
+    content: '⏸';
+    margin-left: 0;
+  }
+
+  @media (max-width: 768px) {
+    .vinyl-info {
+      right: auto;
+      left: 100%;
+      top: 50%;
+      bottom: auto;
+      transform: translateY(-50%);
+      padding: 8px 12px;
+      min-width: 120px;      
+    }
+
+    .vinyl-info-title {
+      font-size: 0.8rem;
+      margin: 0 0 2px 0;
+    }
+    .vinyl-info-artist {
+      font-size: 0.7rem;
+    }
+    .vinyl-info-time {
+      font-size: 0.65rem;
+      margin: 4px 0 0 0;
+    }
+  }
+
+  #tap-hint {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.2rem;
+    color: #666;
+    opacity: 0.6;
+    animation: pulse 2s ease-in-out infinite;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  #trinkets-container.organized #tap-hint {
+    opacity: 0;
+    transition: none;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 0.3; }
+  }
+</style>
+
+<script>
+  const container = document.getElementById('trinkets-container');
+  const trinkets = document.querySelectorAll('.trinket');
+  let organized = false;
+  let player: any = null;
+  let isPlaying = false;
+  let orbitAnimId: number | null = null;
+  let angleOffset = 0;
+  let baseAngles: number[] = [];
+  const MOBILE_RADIUS = 180;
+  const MOBILE_SIZE = 80;
+
+  const tag = document.createElement('script');
+  tag.src = 'https://www.youtube.com/iframe_api';
+  const firstScriptTag = document.getElementsByTagName('script')[0];
+  firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
+
+  (window as any).onYouTubeIframeAPIReady = function() {
+    player = new (window as any).YT.Player('youtube-player', {
+      height: '0',
+      width: '0',
+      videoId: 'Fwv2gnCFDOc',
+      playerVars: {
+        autoplay: 0,
+        controls: 0,
+        start: 31,
+      },
+      events: {
+        'onStateChange': onPlayerStateChange
+      }
+    });
+  };
+
+  function onPlayerStateChange(event: any) {
+    const vinyl = document.querySelector('[data-trinket-id="vinyl"]');
+    if (event.data === (window as any).YT.PlayerState.ENDED) {
+      vinyl?.classList.remove('playing');
+      isPlaying = false;
+    }
+  }
+
+  function formatTime(seconds: number) {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  }
+
+  function setupVinylPlayer() {
+    const vinyl = document.querySelector('[data-trinket-id="vinyl"]');
+    const timeDisplay = vinyl?.querySelector('.vinyl-info-time');
+    let interval: any;
+
+    if (!vinyl) return;
+
+    const startPlaying = () => {
+      if (!player || !player.playVideo) {
+        console.log('Player not ready yet');
+        return;
+      }
+      
+      if (!isPlaying) {
+        player.playVideo();
+        vinyl.classList.add('playing');
+        isPlaying = true;
+        
+        interval = setInterval(() => {
+          if (player && player.getCurrentTime) {
+            const currentTime = player.getCurrentTime();
+            const duration = player.getDuration();
+            if (timeDisplay) {
+              timeDisplay.textContent = `${formatTime(currentTime)} / ${formatTime(duration)}`;
+            }
+          }
+        }, 1000);
+      }
+    };
+
+    const stopPlaying = () => {
+      if (isPlaying) {
+        player.pauseVideo();
+        vinyl.classList.remove('playing');
+        isPlaying = false;
+        clearInterval(interval);
+      }
+    };
+
+    vinyl.addEventListener('mouseenter', () => {
+      startPlaying();
+    });
+
+    vinyl.addEventListener('click', (e) => {
+      e.stopPropagation();
+      
+      if (!player || !player.playVideo) {
+        console.log('Player not ready yet');
+        return;
+      }
+
+      if (isPlaying) {
+        stopPlaying();
+      } else {
+        startPlaying();
+      }
+    });
+  }
+
+  function scatterTrinkets() {
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    
+    // exclude scattering on name/links
+    const panelRight = vw * 0.12; 
+    const panelWidth = vw * 0.25; 
+    const panelHeight = vh * 0.25; 
+    const panelLeft = vw - panelRight - panelWidth;
+    const panelTop = vh * 0.5 - panelHeight / 2;
+    const panelBottom = vh * 0.5 + panelHeight / 2;
+    
+    trinkets.forEach((trinket) => {
+      if (trinket instanceof HTMLElement) {
+        const trinketId = trinket.getAttribute('data-trinket-id');
+        let size = vw * 0.28; 
+        
+        if (trinketId === 'fender') {
+          size = vw * 0.43 * 0.8;
+        } else if (trinketId === 'vinyl') {
+          size = vw * 0.12 * 0.8;
+        } else if (trinketId === 'notebooks') {
+          size = vw * 0.27 * 0.8;
+        } else if (trinketId === 'sewing') {
+          size = vw * 0.25 * 0.8;
+        } else if (trinketId === 'keys') {
+          size = vw * 0.2 * 0.8;
+        } else if (trinketId === 'laptop') {
+          size = vw * 0.3 * 0.8;
+        } else if (trinketId === 'coffee') {
+          size = vw * 0.12 * 0.8;
+        } else if (trinketId === 'indigo') {
+          size = vw * 0.1 * 0.8;
+        } else if (trinketId === 'exopick') {
+          size = vw * 0.18 * 0.8;
+        } else if (trinketId === 'oranges') {
+          size = vw * 0.2 * 0.8;
+        } else if (trinketId === 'mat') {
+          size = vw * 0.28 * 0.8;
+        } else if (trinketId === 'folder') {
+          size = vw * 0.08 * 0.8;
+        } else if (trinketId === 'trophy') {
+          size = vw * 0.26 * 0.8;
+        } else if (trinketId === 'book') {
+          size = vw * 0.24 * 0.8;
+        } else if (trinketId === 'wieee') {
+          size = vw * 0.08 * 0.8;
+        } else if (trinketId === 'madeby') {
+          size = vw * 0.14 * 0.8;
+        } else if (trinketId === 'cup') {
+          size = vw * 0.08 * 0.8;
+        }
+        
+        // generate random position
+        let x, y, attempts = 0;
+        do {
+          x = Math.random() * (window.innerWidth - size);
+          y = Math.random() * (window.innerHeight - size);
+          attempts++;
+          
+          // check if trinket overlaps with name panel
+          const overlaps = (
+            x < panelLeft + panelWidth &&
+            x + size > panelLeft &&
+            y < panelBottom &&
+            y + size > panelTop
+          );
+          
+          if (!overlaps || attempts > 50) break;  
+        } while (true);
+        
+        const rotation = Math.random() * 40 - 20;
+        
+        trinket.style.width = `${size}px`;
+        trinket.style.height = `${size}px`;
+        trinket.style.left = `${x}px`;
+        trinket.style.top = `${y}px`;
+        trinket.style.transform = `rotate(${rotation}deg)`;
+        trinket.classList.add('visible');
+      }
+    });
+  }
+
+  function organizeTrinkets() {
+    if (organized) return;
+    organized = true;
+    container?.classList.add('organized');
+
+    const hint = document.getElementById('tap-hint');
+    
+    if (hint) {
+      hint.style.opacity = '0';
+    }
+    
+    setTimeout(() => {
+      if (hint) {
+        hint.textContent = '↓';
+        hint.style.opacity = '0.6';
+        hint.style.fontSize = '2rem';
+      }
+    }, 2000);
+
+    const isMobile = window.innerWidth <= 768;
+    
+    if (isMobile) {
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      
+      trinkets.forEach((trinket, index) => {
+        if (trinket instanceof HTMLElement) {
+          const trinketId = trinket.getAttribute('data-trinket-id');
+          let size = vw * 0.4;
+          let x = 0, y = 0;
+          let zIndex = index;
+          
+          if (trinketId === 'fender') {
+            size = vw * 0.6;
+            x = vw * -0.1;
+            y = vh * 0.3;
+            zIndex = 3;
+          } else if (trinketId === 'sewing') {
+            size = vw * 0.35;
+            x = vw * 0.68;
+            y = vh * 0.01;
+            zIndex = 5;
+          } else if (trinketId === 'keys') {
+            size = vw * 0.4;
+            x = vw * 0.18;
+            y = vh * 0.54;
+            zIndex = 8;
+          } else if (trinketId === 'laptop') {
+            size = vw * 0.425;
+            x = vw * 0.55;
+            y = vh * 0.65;
+            zIndex = 10;
+          } else if (trinketId === 'notebooks') {
+            size = vw * 0.35;
+            x = vw * 0.1;
+            y = vh * 0.01;
+            zIndex = 7;
+          } else if (trinketId === 'trophy') {
+            size = vw * 0.383;
+            x = vw * -0.09;
+            y = vh * 0.08;
+            zIndex = 9;
+          } else if (trinketId === 'vinyl') {
+            size = vw * 0.25;
+            x = vw * 0.45 - size / 2;
+            y = vh * 0.2;
+            zIndex = 100;
+          } else if (trinketId === 'book') {
+            size = vw * 0.357;
+            x = vw * 0.68;
+            y = vh * 0.28;
+            zIndex = 12;
+          } else if (trinketId === 'wieee') {
+            size = vw * 0.18;
+            x = vw * 0.12;
+            y = vh * 0.22;
+            zIndex = 65;
+          } else if (trinketId === 'folder') {
+            size = vw * 0.15;
+            x = vw * 0.5;
+            y = vh * 0.08;
+            zIndex = 11;
+          } else if (trinketId === 'indigo') {
+            size = vw * 0.15;
+            x = vw - size * 0.8; 
+            y = vh * 0.05;       
+            zIndex = 65;
+          } else if (trinketId === 'coffee') {
+            size = vw * 0.255;
+            x = vw - size * 0.5; 
+            y = vh * 0.5 - size / 2; 
+            zIndex = 60;
+          } else if (trinketId === 'oranges') {
+            size = vw * 0.27;
+            x = vw * 0.65;
+            y = vh * 0.54;
+            zIndex = 14;
+          } else if (trinketId === 'exopick') {
+            size = vw * 0.238;
+            x = -size * 0.15; 
+            y = vh * 0.86;   
+            zIndex = 58;
+          } else if (trinketId === 'mat') {
+            size = vw * 0.45;
+            x = vw * 0.1;
+            y = vh * 0.82;
+            zIndex = 1; 
+          } else if (trinketId === 'madeby') {
+            size = vw * 0.238;
+            x = vw * 0.68;
+            y = vh * 0.15;
+            zIndex = 70;
+          } else if (trinketId === 'cup') {
+            size = vw * 0.18;
+            x = vw * 0.08;
+            y = vh * 0.75;
+            zIndex = 62;
+          }
+          
+          x += (Math.random() - 0.5) * 20;
+          y += (Math.random() - 0.5) * 20;
+          
+          x = Math.max(-size * 0.3, Math.min(x, vw - size * 0.7));
+          y = Math.max(0, Math.min(y, vh - size * 0.95));
+          
+          trinket.style.width = `${size}px`;
+          trinket.style.height = `${size}px`;
+          trinket.style.left = `${x}px`;
+          trinket.style.top = `${y}px`;
+          trinket.style.transform = 'rotate(0deg)';
+          trinket.style.zIndex = String(zIndex);
+        }
+      });
+    } else {
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      
+      trinkets.forEach((trinket, index) => {
+        if (trinket instanceof HTMLElement) {
+          const trinketId = trinket.getAttribute('data-trinket-id');
+          let size = vw * 0.28;
+          let x = 0, y = 0;
+          let zIndex = index;
+          
+          // CLEAN DESKTOP LAYOUT
+          
+          if (trinketId === 'fender') {
+            size = vw * 0.43;
+            x = -size * 0.15;
+            y = vh * 0.05;
+            zIndex = 1;
+          }
+          
+          else if (trinketId === 'vinyl') {
+            size = vw * 0.15;
+            x = vw * 0.39 - size / 2;
+            y = vh * 0.09;
+            zIndex = 50;
+          }
+          
+          else if (trinketId === 'notebooks') {
+            size = vw * 0.27;
+            x = vw * 0.08;
+            y = vh * -1;
+            zIndex = 15;
+          }
+          
+          else if (trinketId === 'sewing') {
+            size = vw * 0.25;
+            x = vw * 0.72;
+            y = vh * 0.05;
+            zIndex = 12;
+          }
+          
+          else if (trinketId === 'keys') {
+            size = vw * 0.2;
+            x = vw * 0.27;
+            y = vh * 0.42;
+            zIndex = 18;
+          }
+          
+          else if (trinketId === 'laptop') {
+            size = vw * 0.3;
+            x = vw * 0.7;
+            y = vh * 0.62;
+            zIndex = 20;
+          }
+          
+          else if (trinketId === 'coffee') {
+            size = vw * 0.12;
+            x = vw * 0.88; 
+            y = vh * 0.44 - size / 2; 
+            zIndex = 60;
+          }
+          
+          else if (trinketId === 'indigo') {
+            size = vw * 0.1;
+            x = vw * 0.9;
+            y = vh * 0.02;       
+            zIndex = 65;
+          }
+
+          else if (trinketId === 'exopick') {
+            size = vw * 0.18;
+            x = vw * 0.06;
+            y = vh * 0.84;
+            zIndex = 25;
+          }
+          
+          else if (trinketId === 'oranges') {
+            size = vw * 0.2;
+            x = vw * 0.55;
+            y = vh * 0.55;
+            zIndex = 55;
+          }
+
+          else if (trinketId === 'mat') {
+            size = vw * 0.28;
+            x = vw * 0.52;
+            y = vh * -1;
+            zIndex = 3;
+          }
+          
+          else if (trinketId === 'folder') {
+            size = vw * 0.08; 
+            x = vw * 0.43;
+            y = vh * 0.62;
+            zIndex = 25;
+          }
+          
+          else if (trinketId === 'trophy') {
+            size = vw * 0.26;
+            x = vw * 0.57;
+            y = vh * 0.15;
+            zIndex = 19;
+          }
+          
+          else if (trinketId === 'book') {
+            size = vw * 0.24;
+            x = vw * 0.10;
+            y = vh * 0.75;
+            zIndex = 22;
+          }
+          
+          else if (trinketId === 'wieee') {
+            size = vw * 0.08;
+            x = vw * 0.5;
+            y = vh * 0.68;
+            zIndex = 60;
+          }
+          
+          else if (trinketId === 'madeby') {
+            size = vw * 0.14;
+            x = vw * 0.08;
+            y = vh * 0.40;
+            zIndex = 70;
+          }
+          
+          else if (trinketId === 'cup') {
+            size = vw * 0.08;
+            x = vw * 0.3;
+            y = vh * 0.81;
+            zIndex = 62;
+          }
+          
+          
+          // Clamp to viewport
+          x = Math.max(-size * 0.2, Math.min(x, vw - size * 0.8));
+          y = Math.max(0, Math.min(y, vh - size * 0.95));
+          
+          trinket.style.width = `${size}px`;
+          trinket.style.height = `${size}px`;
+          trinket.style.left = `${x}px`;
+          trinket.style.top = `${y}px`;
+          trinket.style.transform = 'rotate(0deg)';
+          trinket.style.zIndex = String(zIndex);
+        }
+      });
+    }
+
+    setTimeout(() => {
+      document.dispatchEvent(new CustomEvent('trinkets-organized'));
+    }, 1400);
+  }
+
+  function startMobileOrbit() {
+    baseAngles = Array.from({ length: trinkets.length }, (_, i) => (i / trinkets.length) * Math.PI * 2);
+    
+    trinkets.forEach((trinket) => {
+      if (trinket instanceof HTMLElement) {
+        trinket.style.width = `${MOBILE_SIZE}px`;
+        trinket.style.height = `${MOBILE_SIZE}px`;
+        trinket.classList.add('visible');
+      }
+    });
+
+    const tick = () => {
+      const cx = window.innerWidth / 2;
+      const cy = window.innerHeight / 2;
+      trinkets.forEach((trinket, i) => {
+        if (trinket instanceof HTMLElement) {
+          const a = baseAngles[i] + angleOffset;
+          const x = cx + Math.cos(a) * MOBILE_RADIUS - MOBILE_SIZE / 2;
+          const y = cy + Math.sin(a) * MOBILE_RADIUS - MOBILE_SIZE / 2;
+          trinket.style.left = `${x}px`;
+          trinket.style.top = `${y}px`;
+          trinket.style.transform = 'rotate(0deg)';
+        }
+      });
+      angleOffset += 0.004;
+      orbitAnimId = requestAnimationFrame(tick);
+    };
+    if (orbitAnimId) cancelAnimationFrame(orbitAnimId);
+    orbitAnimId = requestAnimationFrame(tick);
+  }
+
+  function stopMobileOrbit() {
+    if (orbitAnimId) {
+      cancelAnimationFrame(orbitAnimId);
+      orbitAnimId = null;
+    }
+  }
+
+  const isMobile = window.innerWidth <= 768;
+  if (isMobile) {
+    container?.classList.add('mobile-mode');
+    const hint = document.getElementById('tap-hint');
+    if (hint) hint.textContent = 'tap to organize';
+    startMobileOrbit();
+  } else {
+    scatterTrinkets();
+  }
+  
+  setTimeout(setupVinylPlayer, 1000);
+
+  container?.addEventListener('click', (e) => {
+    if (organized) return;
+    if ((e.target as HTMLElement).tagName === 'A' || (e.target as HTMLElement).closest('a')) {
+      return;
+    }
+    if ((e.target as HTMLElement).closest('[data-trinket-id="vinyl"]')) {
+      return;
+    }
+    if (isMobile) stopMobileOrbit();
+    organizeTrinkets();
+  });
+
+  container?.addEventListener('touchstart', (e) => {
+    if (organized) return;
+    if ((e.target as HTMLElement).tagName === 'A' || (e.target as HTMLElement).closest('a')) {
+      return;
+    }
+    if ((e.target as HTMLElement).closest('[data-trinket-id="vinyl"]')) {
+      return;
+    }
+    e.preventDefault();
+    if (isMobile) stopMobileOrbit();
+    organizeTrinkets();
+  }, { passive: false });
+
+  let resizeTimeout: any;
+  window.addEventListener('resize', () => {
+    if (!organized) {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(scatterTrinkets, 100);
+    }
+  });
+</script>

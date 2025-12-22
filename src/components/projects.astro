@@ -2,9 +2,9 @@
 const projects = [
   {
     name: 'coveo',
-    description: 'software developer intern, knowledge core team',
+    description: 'software developer intern, service core R&D team',
     url: 'https://github.com/coveo/ui-kit',
-    date: 'may 2025 - august 2025'
+    date: 'may 2024 - august 2024'
   },
   {
     name: 'vinimap',
@@ -29,23 +29,37 @@ const projects = [
 
 <div class="projects-content">
   <div class="projects-list">
-    {projects.map(project => (
-      <div class="project-card">
-        <div class="project-header">
-          <h3>
-            <a href={project.url} target="_blank" rel="noopener noreferrer">
-              {project.name}
-            </a>
-          </h3>
-          <p class="date">{project.date}</p>
+    {projects.map((project, index) => {
+      const parts = project.description.split(' - ');
+      const mainText = parts[0];
+      const subText = parts[1] || '';
+      
+      return (
+        <div class="project-card">
+          <div class="project-header">
+            <h3>
+              <a href={project.url} target="_blank" rel="noopener noreferrer">
+                {project.name}
+              </a>
+            </h3>
+            <p class="date">{project.date}</p>
+          </div>
+          <p class="description">
+            {mainText}
+            {subText && <span class="sub-description">{subText}</span>}
+          </p>
         </div>
-        <p class="description">{project.description}</p>
-      </div>
-    ))}
+      );
+    })}
   </div>
 </div>
 
 <style>
+  .projects-content {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
   .projects-list {
     display: flex;
     flex-direction: column;
@@ -54,6 +68,8 @@ const projects = [
 
   .project-card {
     padding: 0;
+    opacity: 1;
+    transform: translateX(0);
   }
 
   .project-header {
@@ -65,22 +81,23 @@ const projects = [
   }
 
   .project-card h3 {
-    font-size: 1.3rem;
+    font-size: 1.35rem;
     margin: 0;
   }
 
   .project-card h3 a {
-    color: white;
-    transition: color 0.3s ease;
+    color: #0f172a;
+    transition: color 0.2s ease;
   }
 
   .project-card h3 a:hover {
-    color: #88c8ff;
+    color: #1d4ed8;
+    text-decoration: none;
   }
 
   .date {
-    font-size: 1rem;
-    opacity: 0.5;
+    font-size: 0.95rem;
+    color: #334155;
     margin: 0;
     white-space: nowrap;
   }
@@ -88,15 +105,34 @@ const projects = [
   .description {
     font-size: 1rem;
     margin: 0;
-    opacity: 0.9;
+    color: #1f2937;
     line-height: 1.6;
   }
 
+  .sub-description {
+    display: block;
+    color: #6b7280;
+    font-style: italic;
+    margin-top: 0.25rem;
+  }
+
   @media (max-width: 768px) {
+    .projects-list {
+      gap: 1.75rem;
+    }
+
     .project-header {
       flex-direction: column;
       align-items: flex-start;
       gap: 0.25rem;
+    }
+
+    .project-card h3 {
+      font-size: 1.2rem;
+    }
+
+    .description {
+      font-size: 0.95rem;
     }
   }
 </style>

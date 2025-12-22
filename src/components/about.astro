@@ -2,7 +2,7 @@
 const links = [
   { name: 'github', url: 'https://github.com/vinishamanek' },
   { name: 'linkedin', url: 'https://linkedin.com/in/vinishamanek' },
-  { name: 'email', url: 'mailto:vinimanek@gmail.com' },
+  { name: 'email', url: 'https://mail.google.com/mail/?view=cm&to=vinimanek@gmail.com' },
 ];
 ---
 
@@ -11,35 +11,30 @@ const links = [
     hi! i'm vini, a 4th year software engineering student at concordia university in montreal.
   </p>
   <p>
-    i'm currently the co-president of <a href="https://www.womeninengineeringconcordia.com/" target="_blank" rel="noopener noreferrer">women in engineering</a>, and work as a teaching assistant for Software Requirements and Deployment (<a href="https://www.concordia.ca/academics/undergraduate/calendar/current/section-71-gina-cody-school-of-engineering-and-computer-science/section-71-70-department-of-computer-science-and-software-engineering/section-71-70-10-computer-science-and-software-engineering-courses.html#:~:text=SOEN%20342,-Software%20Requirements%20and" target="_blank" rel="noopener noreferrer">SOEN 342</a>) and Formal Methods in Software Engineering (<a href="https://www.concordia.ca/academics/undergraduate/calendar/current/section-71-gina-cody-school-of-engineering-and-computer-science/section-71-70-department-of-computer-science-and-software-engineering/section-71-70-10-computer-science-and-software-engineering-courses.html#:~:text=SOEN%20331,-Formal%20Methods%20for" target="_blank" rel="noopener noreferrer">SOEN 331</a>).
+    i'm currently the co-president of <a href="https://www.womeninengineeringconcordia.com/" target="_blank" rel="noopener noreferrer">women in engineering</a>, and work as a teaching assistant for Software Requirements and Deployment (<a href="https://www.concordia.ca/academics/undergraduate/calendar/current/section-71-gina-cody-school-of-engineering-and-computer-science/section-71-70-department-of-computer-science-and-software-engineering/section-71-70-10-computer-science-and-software-engineering-courses.html#:~:text=SOEN%20342,-Software%20Requirements%20and" target="_blank" rel="noopener noreferrer">SOEN 342</a>) and Formal Methods in Software (<a href="https://www.concordia.ca/academics/undergraduate/calendar/current/section-71-gina-cody-school-of-engineering-and-computer-science/section-71-70-department-of-computer-science-and-software-engineering/section-71-70-10-computer-science-and-software-engineering-courses.html#:~:text=SOEN%20331,-Formal%20Methods%20for" target="_blank" rel="noopener noreferrer">SOEN 331</a>).
   </p>
   <p>
     aside from studies:
     i love music, biking, coffee, sudokus, the NYT mini games, basketball, sewing, reading, travelling, architecture, and problem-solving (among others)!
   </p>
   
-  <div class="links-section">
-    <ul class="links-list">
-      {links.map(link => (
-        <li>
-          <a href={link.url} target="_blank" rel="noopener noreferrer">
-            {link.name}
-          </a>
-        </li>
-      ))}
-    </ul>
-  </div>
 </div>
 
 <style>
+  .about-content {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
   .about-content p {
-    font-size: 1.2rem;
-    line-height: 1.8;
-    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    margin-bottom: 1.25rem;
+    color: #334155;
   }
 
   .links-section {
-    margin-top: 2.5rem;
+    margin-top: 2rem;
   }
 
   .links-list {
@@ -56,23 +51,37 @@ const links = [
   }
 
   .links-list a {
-    font-size: 1.5rem;
-    color: #88c8ff;
+    font-size: 1.25rem;
+    color: #3b82f6;
     transition: color 0.3s ease;
   }
 
-  .about-content p a {
-    color: inherit;
-    font-size: inherit;
-    text-decoration: underline;
-    transition: none;
+  .links-list a:hover {
+    color: #2563eb;
   }
 
+  .about-content p a {
+    color: #3b82f6;
+    font-size: inherit;
+    text-decoration: underline;
+  }
 
+  .about-content p a:hover {
+    color: #2563eb;
+  }
+  
   @media (max-width: 768px) {
+    .about-content p {
+      font-size: 1rem;
+    }
+
     .links-list {
       flex-direction: column;
       gap: 1rem;
+    }
+
+    .links-list a {
+      font-size: 1.1rem;
     }
   }
 </style>

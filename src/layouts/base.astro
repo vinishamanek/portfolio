@@ -14,37 +14,46 @@ const { title = 'vinisha manek' } = Astro.props;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>{title}</title>
-    <link rel="icon" type="image/svg+xml" href="flower.svg"/>
+    <link rel="icon" type="image/svg+xml" href="/flower.svg"/>
   </head>
   <body>
     <div id="main-content">
       <slot />
     </div>
     
-  <button id="sudoku-flower" aria-label="Play Sudoku">
-    <img src="/flower.svg" alt="flower" />
-  </button>
-  <Sudoku client:load />
+    <button id="sudoku-flower" aria-label="Play Sudoku">
+      <img src="/flower.svg" alt="flower" />
+    </button>
+    <Sudoku />
   </body>
 </html>
 
 <style is:global>
   * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
   }
 
   body {
     margin: 0;
     padding: 0;
-    background: #2C1404;
-    color: white;
-    font-family: Helvetica, Arial, sans-serif;
+    background: #f2f3f4;
+    color: #1e293b;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     min-height: 100vh;
     overflow-x: hidden;
   }
 
   a {
-    color: white;
+    color: inherit;
     text-decoration: none;
   }
 
@@ -123,7 +132,11 @@ const { title = 'vinisha manek' } = Astro.props;
     filter: drop-shadow(0 6px 18px rgba(0,0,0,0.35));
   }
 
-  .flower-particle img { width: 100%; height: 100%; display: block; }
+  .flower-particle img { 
+    width: 100%; 
+    height: 100%; 
+    display: block; 
+  }
 
   @media (max-width: 640px) {
     #sudoku-flower img {
@@ -149,7 +162,7 @@ const { title = 'vinisha manek' } = Astro.props;
     
     const clone = document.createElement('div');
     clone.className = 'flower-clone';
-    clone.innerHTML = flower.innerHTML; // Copy the img element
+    clone.innerHTML = flower.innerHTML;
     clone.style.left = `${rect.left + rect.width / 2}px`;
     clone.style.top = `${rect.top + rect.height / 2}px`;
     clone.style.transform = 'translate(-50%, -50%)';
@@ -169,7 +182,6 @@ const { title = 'vinisha manek' } = Astro.props;
       });
     });
     
-    // Clean up
     setTimeout(() => {
       clone.remove();
       flower.classList.remove('animating');
@@ -180,10 +192,12 @@ const { title = 'vinisha manek' } = Astro.props;
     mutations.forEach((mutation) => {
       if (mutation.attributeName === 'hidden') {
         const target = mutation.target;
-        if (target && target.hidden) {
-          document.body.classList.remove('sudoku-active');
-        } else {
-          document.body.classList.add('sudoku-active');
+        if (target && 'hidden' in target) {
+          if (target.hidden) {
+            document.body.classList.remove('sudoku-active');
+          } else {
+            document.body.classList.add('sudoku-active');
+          }
         }
       }
     });
@@ -191,46 +205,5 @@ const { title = 'vinisha manek' } = Astro.props;
 
   if (sudokuScreen) {
     observer.observe(sudokuScreen, { attributes: true });
-  }
-
-  document.addEventListener('intro-finished', () => {
-    console.log('[layout] intro-finished received');
-    try {
-      createFlowerExplosion(18);
-    } catch (err) {
-      console.error('createFlowerExplosion error', err);
-    }
-  });
-
-  function createFlowerExplosion(count = 12) {
-    const centerX = window.innerWidth / 2;
-    const centerY = window.innerHeight / 2;
-
-    for (let i = 0; i < count; i++) {
-      const p = document.createElement('div');
-      p.className = 'flower-particle';
-      p.style.left = `${centerX}px`;
-      p.style.top = `${centerY}px`;
-      // small initial size, will grow as it flies
-      p.style.transform = 'translate(-50%, -50%) scale(0.6)';
-      p.style.opacity = '1';
-      p.innerHTML = `<img src="/flower.svg" alt="flower" />`;
-      document.body.appendChild(p);
-
-      const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.8;
-      const dist = 160 + Math.random() * 360; // wider spread
-      const tx = Math.cos(angle) * dist;
-      const ty = Math.sin(angle) * dist - (Math.random() * 40);
-      const rot = (Math.random() - 0.5) * 720;
-      const finalScale = 1 + Math.random() * 1.4; // grow to between 1 and 2.4
-
-      setTimeout(() => {
-        p.style.transform = `translate(${tx}px, ${ty}px) scale(${finalScale}) rotate(${rot}deg)`;
-        p.style.opacity = '0';
-      }, Math.random() * 220);
-
-      // remove after animation finishes (longer)
-      setTimeout(() => p.remove(), 1800 + Math.random() * 900);
-    }
   }
 </script>
