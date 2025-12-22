@@ -139,11 +139,11 @@ const trinkets = [
       left: 50%;
     }
     .intro-name {
-      font-size: 2rem;
+      font-size: 2.5rem;
     }
     .intro-links {
       flex-direction: column;
-      gap: 0.35rem;
+      gap: 0.5rem;
       align-items: center;
       justify-content: center;
     }
@@ -151,7 +151,7 @@ const trinkets = [
       align-items: center;
     }
     .intro-links a {
-      font-size: 1rem;
+      font-size: 1.15rem;
     }
   }
 
@@ -554,102 +554,96 @@ const trinkets = [
       trinkets.forEach((trinket, index) => {
         if (trinket instanceof HTMLElement) {
           const trinketId = trinket.getAttribute('data-trinket-id');
-          let size = vw * 0.4;
+          let size = vw * 0.3;
           let x = 0, y = 0;
           let zIndex = index;
           
           if (trinketId === 'fender') {
-            size = vw * 0.6;
-            x = vw * -0.1;
+            size = vw * 0.5;
+            x = vw * 0.02;
             y = vh * 0.3;
             zIndex = 3;
           } else if (trinketId === 'sewing') {
-            size = vw * 0.35;
+            size = vw * 0.28;
             x = vw * 0.68;
-            y = vh * 0.01;
+            y = vh * 0.02;
             zIndex = 5;
           } else if (trinketId === 'keys') {
-            size = vw * 0.4;
-            x = vw * 0.18;
-            y = vh * 0.54;
+            size = vw * 0.35;
+            x = vw * 0.2;
+            y = vh * 0.55;
             zIndex = 8;
           } else if (trinketId === 'laptop') {
-            size = vw * 0.425;
-            x = vw * 0.55;
-            y = vh * 0.65;
+            size = vw * 0.38;
+            x = vw * 0.56;
+            y = vh * 0.66;
             zIndex = 10;
           } else if (trinketId === 'notebooks') {
-            size = vw * 0.35;
-            x = vw * 0.1;
-            y = vh * 0.01;
+            size = vw * 0.3;
+            x = vw * 0.12;
+            y = vh * 0.02;
             zIndex = 7;
           } else if (trinketId === 'trophy') {
-            size = vw * 0.383;
-            x = vw * -0.09;
+            size = vw * 0.35;
+            x = vw * 0.02;
             y = vh * 0.08;
             zIndex = 9;
           } else if (trinketId === 'vinyl') {
-            size = vw * 0.25;
-            x = vw * 0.45 - size / 2;
-            y = vh * 0.2;
+            size = vw * 0.22;
+            x = vw * 0.5 - size / 2;
+            y = vh * 0.18;
             zIndex = 100;
           } else if (trinketId === 'book') {
-            size = vw * 0.357;
-            x = vw * 0.68;
+            size = vw * 0.32;
+            x = vw * 0.65;
             y = vh * 0.28;
             zIndex = 12;
           } else if (trinketId === 'wieee') {
-            size = vw * 0.18;
-            x = vw * 0.12;
-            y = vh * 0.22;
+            size = vw * 0.16;
+            x = vw * 0.14;
+            y = vh * 0.2;
             zIndex = 65;
           } else if (trinketId === 'folder') {
-            size = vw * 0.15;
-            x = vw * 0.5;
-            y = vh * 0.08;
+            size = vw * 0.14;
+            x = vw * 0.5 - size / 2;
+            y = vh * 0.06;
             zIndex = 11;
           } else if (trinketId === 'indigo') {
-            size = vw * 0.15;
-            x = vw - size * 0.8; 
-            y = vh * 0.05;       
+            size = vw * 0.14;
+            x = vw * 0.82; 
+            y = vh * 0.04;       
             zIndex = 65;
           } else if (trinketId === 'coffee') {
-            size = vw * 0.255;
-            x = vw - size * 0.5; 
-            y = vh * 0.5 - size / 2; 
+            size = vw * 0.24;
+            x = vw * 0.72; 
+            y = vh * 0.48; 
             zIndex = 60;
           } else if (trinketId === 'oranges') {
-            size = vw * 0.27;
+            size = vw * 0.25;
             x = vw * 0.65;
-            y = vh * 0.54;
+            y = vh * 0.56;
             zIndex = 14;
           } else if (trinketId === 'exopick') {
-            size = vw * 0.238;
-            x = -size * 0.15; 
-            y = vh * 0.86;   
+            size = vw * 0.22;
+            x = vw * 0.02; 
+            y = vh * 0.83;   
             zIndex = 58;
           } else if (trinketId === 'mat') {
-            size = vw * 0.45;
-            x = vw * 0.1;
-            y = vh * 0.82;
+            size = vw * 0.42;
+            x = vw * 0.12;
+            y = vh * 0.8;
             zIndex = 1; 
           } else if (trinketId === 'madeby') {
-            size = vw * 0.238;
+            size = vw * 0.22;
             x = vw * 0.68;
-            y = vh * 0.15;
+            y = vh * 0.14;
             zIndex = 70;
           } else if (trinketId === 'cup') {
-            size = vw * 0.18;
-            x = vw * 0.08;
-            y = vh * 0.75;
+            size = vw * 0.16;
+            x = vw * 0.1;
+            y = vh * 0.73;
             zIndex = 62;
           }
-          
-          x += (Math.random() - 0.5) * 20;
-          y += (Math.random() - 0.5) * 20;
-          
-          x = Math.max(-size * 0.3, Math.min(x, vw - size * 0.7));
-          y = Math.max(0, Math.min(y, vh - size * 0.95));
           
           trinket.style.width = `${size}px`;
           trinket.style.height = `${size}px`;
@@ -814,10 +808,23 @@ const trinkets = [
   function startMobileOrbit() {
     baseAngles = Array.from({ length: trinkets.length }, (_, i) => (i / trinkets.length) * Math.PI * 2);
     
-    trinkets.forEach((trinket) => {
+    const cx = window.innerWidth / 2;
+    const cy = window.innerHeight / 2;
+    
+    trinkets.forEach((trinket, i) => {
       if (trinket instanceof HTMLElement) {
         trinket.style.width = `${MOBILE_SIZE}px`;
         trinket.style.height = `${MOBILE_SIZE}px`;
+        trinket.style.transition = 'none';
+        
+        // Set initial position before making visible
+        const a = baseAngles[i] + angleOffset;
+        const x = cx + Math.cos(a) * MOBILE_RADIUS - MOBILE_SIZE / 2;
+        const y = cy + Math.sin(a) * MOBILE_RADIUS - MOBILE_SIZE / 2;
+        trinket.style.left = `${x}px`;
+        trinket.style.top = `${y}px`;
+        trinket.style.transform = 'rotate(0deg)';
+        
         trinket.classList.add('visible');
       }
     });
@@ -860,8 +867,38 @@ const trinkets = [
   if (isMobile) {
     container?.classList.add('mobile-mode');
     const hint = document.getElementById('tap-hint');
-    if (hint) hint.textContent = 'tap to organize';
-    startMobileOrbit();
+    if (hint) hint.remove();
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    trinkets.forEach((trinket) => {
+      if (trinket instanceof HTMLElement) {
+        const trinketId = trinket.getAttribute('data-trinket-id');
+        let size = vw * 0.4;
+        
+        if (trinketId === 'fender') size = vw * 0.6;
+        else if (trinketId === 'sewing') size = vw * 0.35;
+        else if (trinketId === 'keys') size = vw * 0.4;
+        else if (trinketId === 'laptop') size = vw * 0.425;
+        else if (trinketId === 'notebooks') size = vw * 0.35;
+        else if (trinketId === 'trophy') size = vw * 0.383;
+        else if (trinketId === 'vinyl') size = vw * 0.25;
+        else if (trinketId === 'book') size = vw * 0.357;
+        else if (trinketId === 'wieee') size = vw * 0.18;
+        else if (trinketId === 'folder') size = vw * 0.15;
+        else if (trinketId === 'indigo') size = vw * 0.15;
+        else if (trinketId === 'coffee') size = vw * 0.255;
+        else if (trinketId === 'oranges') size = vw * 0.27;
+        else if (trinketId === 'exopick') size = vw * 0.238;
+        else if (trinketId === 'mat') size = vw * 0.45;
+        else if (trinketId === 'madeby') size = vw * 0.238;
+        else if (trinketId === 'cup') size = vw * 0.18;
+        
+        trinket.style.width = `${size}px`;
+        trinket.style.height = `${size}px`;
+        trinket.classList.add('visible');
+      }
+    });
+    organizeTrinkets();
   } else {
     scatterTrinkets();
   }
@@ -869,19 +906,18 @@ const trinkets = [
   setTimeout(setupVinylPlayer, 1000);
 
   container?.addEventListener('click', (e) => {
-    if (organized) return;
+    if (organized || isMobile) return;
     if ((e.target as HTMLElement).tagName === 'A' || (e.target as HTMLElement).closest('a')) {
       return;
     }
     if ((e.target as HTMLElement).closest('[data-trinket-id="vinyl"]')) {
       return;
     }
-    if (isMobile) stopMobileOrbit();
     organizeTrinkets();
   });
 
   container?.addEventListener('touchstart', (e) => {
-    if (organized) return;
+    if (organized || isMobile) return;
     if ((e.target as HTMLElement).tagName === 'A' || (e.target as HTMLElement).closest('a')) {
       return;
     }
@@ -889,7 +925,6 @@ const trinkets = [
       return;
     }
     e.preventDefault();
-    if (isMobile) stopMobileOrbit();
     organizeTrinkets();
   }, { passive: false });
 
