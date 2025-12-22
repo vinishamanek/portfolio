@@ -131,7 +131,7 @@ const trinkets = [
     .intro-panel {
       right: auto;
       left: 50%;
-      top: 48%;
+      top: 47%;
       transform: translate(-50%, -50%);
       text-align: center;
     }
@@ -334,7 +334,8 @@ const trinkets = [
 
   @media (max-width: 768px) {
     #tap-hint {
-      display: block; /* Changed from none to block to show the hint */
+      display: block; 
+      bottom: 3rem;  
     }
   }
 
@@ -912,6 +913,18 @@ const trinkets = [
       }
     });
     organizeTrinkets();
+
+    const introPanel = document.querySelector('.intro-panel');
+    if (introPanel) {
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const vinylSize = vw * 0.22;
+      const vinylY = vh * 0.18;
+      const nameTop = vinylY + vinylSize + 100;
+      
+      introPanel.style.top = `${nameTop}px`;
+      introPanel.style.transform = 'translate(-50%, -50%)';
+    }
   } else {
     scatterTrinkets();
   }
