@@ -833,6 +833,7 @@ const trinkets = [
           trinket.style.left = `${x}px`;
           trinket.style.top = `${y}px`;
           trinket.style.transform = 'rotate(0deg)';
+          trinket.style.transition = 'none';
         }
       });
       angleOffset += 0.004;
@@ -847,6 +848,12 @@ const trinkets = [
       cancelAnimationFrame(orbitAnimId);
       orbitAnimId = null;
     }
+    // Re-enable transitions when orbit stops
+    trinkets.forEach((trinket) => {
+      if (trinket instanceof HTMLElement) {
+        trinket.style.transition = '';
+      }
+    });
   }
 
   const isMobile = window.innerWidth <= 768;
