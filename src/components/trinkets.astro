@@ -131,7 +131,7 @@ const trinkets = [
     .intro-panel {
       right: auto;
       left: 50%;
-      top: 42%;
+      top: 48%;
       transform: translate(-50%, -50%);
       text-align: center;
     }
@@ -330,6 +330,12 @@ const trinkets = [
   #trinkets-container.organized #tap-hint {
     opacity: 0;
     transition: none;
+  }
+
+  @media (max-width: 768px) {
+    #tap-hint {
+      display: block; /* Changed from none to block to show the hint */
+    }
   }
 
   @keyframes pulse {
@@ -533,21 +539,22 @@ const trinkets = [
     container?.classList.add('organized');
 
     const hint = document.getElementById('tap-hint');
+    const isMobile = window.innerWidth <= 768;
     
-    if (hint) {
+    if (hint && !isMobile) {
       hint.style.opacity = '0';
     }
     
-    setTimeout(() => {
-      if (hint) {
-        hint.textContent = '↓';
-        hint.style.opacity = '0.6';
-        hint.style.fontSize = '2rem';
-      }
-    }, 2000);
+    if (!isMobile) {
+      setTimeout(() => {
+        if (hint) {
+          hint.textContent = '↓';
+          hint.style.opacity = '0.6';
+          hint.style.fontSize = '2rem';
+        }
+      }, 2000);
+    }
 
-    const isMobile = window.innerWidth <= 768;
-    
     if (isMobile) {
       const vw = window.innerWidth;
       const vh = window.innerHeight;
@@ -566,8 +573,8 @@ const trinkets = [
             zIndex = 3;
           } else if (trinketId === 'sewing') {
             size = vw * 0.28;
-            x = vw * 0.68;
-            y = vh * 0.02;
+            x = vw * 0.6;
+            y = vh * 0.01;
             zIndex = 5;
           } else if (trinketId === 'keys') {
             size = vw * 0.35;
@@ -605,10 +612,11 @@ const trinkets = [
             y = vh * 0.2;
             zIndex = 65;
           } else if (trinketId === 'folder') {
-            size = vw * 0.14;
-            x = vw * 0.5 - size / 2;
-            y = vh * 0.06;
-            zIndex = 11;
+            size = 0;
+            x = -1000;
+            y = -1000;
+            zIndex = -1;
+            trinket.style.opacity = '0';
           } else if (trinketId === 'indigo') {
             size = vw * 0.14;
             x = vw * 0.82; 
@@ -631,8 +639,8 @@ const trinkets = [
             zIndex = 58;
           } else if (trinketId === 'mat') {
             size = vw * 0.42;
-            x = vw * 0.12;
-            y = vh * 0.8;
+            x = vw * 0.01;
+            y = vh * 0.7;
             zIndex = 1; 
           } else if (trinketId === 'madeby') {
             size = vw * 0.22;
@@ -868,7 +876,11 @@ const trinkets = [
   if (isMobile) {
     container?.classList.add('mobile-mode');
     const hint = document.getElementById('tap-hint');
-    if (hint) hint.remove();
+    if (hint) {
+      hint.textContent = '↓';
+      hint.style.display = 'block';
+      hint.style.opacity = '0.6';
+    }
     const vw = window.innerWidth;
     const vh = window.innerHeight;
     trinkets.forEach((trinket) => {
@@ -885,7 +897,7 @@ const trinkets = [
         else if (trinketId === 'vinyl') size = vw * 0.25;
         else if (trinketId === 'book') size = vw * 0.357;
         else if (trinketId === 'wieee') size = vw * 0.18;
-        else if (trinketId === 'folder') size = vw * 0.15;
+        else if (trinketId === 'folder') size = 0; 
         else if (trinketId === 'indigo') size = vw * 0.15;
         else if (trinketId === 'coffee') size = vw * 0.255;
         else if (trinketId === 'oranges') size = vw * 0.27;
