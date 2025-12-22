@@ -335,7 +335,7 @@ const trinkets = [
   @media (max-width: 768px) {
     #tap-hint {
       display: block; 
-      bottom: 3rem;  
+      bottom: 5rem;  
     }
   }
 
@@ -578,7 +578,7 @@ const trinkets = [
             y = vh * 0.01;
             zIndex = 5;
           } else if (trinketId === 'keys') {
-            size = vw * 0.35;
+            size = vw * 0.33;
             x = vw * 0.2;
             y = vh * 0.55;
             zIndex = 8;
@@ -604,8 +604,8 @@ const trinkets = [
             zIndex = 100;
           } else if (trinketId === 'book') {
             size = vw * 0.32;
-            x = vw * 0.65;
-            y = vh * 0.28;
+            x = vw * 0.7;
+            y = vh * 0.22;
             zIndex = 12;
           } else if (trinketId === 'wieee') {
             size = vw * 0.16;
@@ -625,13 +625,13 @@ const trinkets = [
             zIndex = 65;
           } else if (trinketId === 'coffee') {
             size = vw * 0.24;
-            x = vw * 0.72; 
-            y = vh * 0.48; 
+            x = vw * 0.76; 
+            y = vh * 0.56; 
             zIndex = 60;
           } else if (trinketId === 'oranges') {
             size = vw * 0.25;
-            x = vw * 0.65;
-            y = vh * 0.56;
+            x = vw * 0.62;
+            y = vh * 0.44;
             zIndex = 14;
           } else if (trinketId === 'exopick') {
             size = vw * 0.22;
@@ -645,7 +645,7 @@ const trinkets = [
             zIndex = 1; 
           } else if (trinketId === 'madeby') {
             size = vw * 0.22;
-            x = vw * 0.68;
+            x = vw * 0.64;
             y = vh * 0.14;
             zIndex = 70;
           } else if (trinketId === 'cup') {
@@ -912,19 +912,7 @@ const trinkets = [
         trinket.classList.add('visible');
       }
     });
-    organizeTrinkets();
-
-    const introPanel = document.querySelector('.intro-panel');
-    if (introPanel) {
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
-      const vinylSize = vw * 0.22;
-      const vinylY = vh * 0.18;
-      const nameTop = vinylY + vinylSize + 100;
-      
-      introPanel.style.top = `${nameTop}px`;
-      introPanel.style.transform = 'translate(-50%, -50%)';
-    }
+    organizeTrinkets();  
   } else {
     scatterTrinkets();
   }
