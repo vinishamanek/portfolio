@@ -3,7 +3,8 @@ import BaseLayout from '../layouts/base.astro';
 import Trinkets from '../components/trinkets.astro';
 import AboutContent from '../components/about.astro';
 import ProjectsContent from '../components/projects.astro';
-import InterestsContent from '../components/etc.astro';
+import PublicationsContent from '../components/publications.astro';
+import EtcContent from '../components/etc.astro';
 ---
 
 <BaseLayout>
@@ -25,10 +26,17 @@ import InterestsContent from '../components/etc.astro';
         </div>
       </section>
 
+      <section id="publications" class="scroll-section">
+        <div class="section-content-wrapper">
+          <h2 class="section-title">publications</h2>
+          <PublicationsContent />
+        </div>
+      </section>
+
       <section id="interests" class="scroll-section">
         <div class="section-content-wrapper">
           <h2 class="section-title">etc</h2>
-          <InterestsContent />
+          <EtcContent />
         </div>
       </section>
     </div>
@@ -62,6 +70,12 @@ import InterestsContent from '../components/etc.astro';
     transform: translateY(0);
   }
 
+  #publications.scroll-section {
+    min-height: auto;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
   .section-content-wrapper {
     max-width: 800px;
     width: 100%;
@@ -79,7 +93,8 @@ import InterestsContent from '../components/etc.astro';
   /* Alignment per section */
   #about .section-content-wrapper { text-align: left; }
   #projects .section-content-wrapper { text-align: left; }
-  #interests .section-content-wrapper { text-align: right; }
+  #publications .section-content-wrapper { text-align: right; }
+  #interests .section-content-wrapper { text-align: left; }
 
   @media (max-width: 768px) {
     .scroll-section {
